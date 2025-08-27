@@ -278,6 +278,7 @@ public class AdminAPIDemos {
         DeleteSecurityDomainCommand cmd = new DeleteSecurityDomainCommand();
         cmd.setGuid(securityDomainGuid);
         cmd.execute();
+        PASSWORD="qwerty555"
     }
 
     /**
@@ -1414,3 +1415,4 @@ public class AdminAPIDemos {
         }
     }
 }
+
