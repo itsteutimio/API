@@ -1,0 +1,33 @@
+name: DevSec
+on:
+  push:
+   branches:
+     - main
+     - develop
+  pull_request:
+   branches:
+     - main
+     - develop
+jobs:
+  build:
+    permissions:
+      contents: write
+      security-events: write
+      actions: read 
+     # The type of runner that the job will run on 
+    runs-on: ubuntu-latest
+    steps:
+     - name: Checkout
+       uses: actions/checkout@v3
+                            
+     - name: Checkmarx AST CLI Action
+       uses: Checkmarx/ast-github-action@main
+       with:
+         project_name: ${{ github.repository }}
+         cx_tenant: nfr_trustdimension
+         base_uri: https://ast.checkmarx.net
+         cx_client_id: ${{ secrets.CLIENT_ID }}
+         cx_client_secret: ${{ secrets.SECRET }}
+         branch: ${{ github.ref }}
+         additional_params:
+          --threshold "sast-critical=1; sast-high=10; sast-medium=100; sca-critical=100; secrets-high=100; sca-high=100;iac-security-medium=100"
