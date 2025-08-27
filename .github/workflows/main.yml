@@ -1,50 +1,33 @@
-name: Generate01
-
+name: DevSec
 on:
   push:
-    branches:
-      - main
+   branches:
+     - main
+     - develop
   pull_request:
-
+   branches:
+     - main
+     - develop
 jobs:
-  generate-containers-resolution:
+  build:
+    permissions:
+      contents: write
+      security-events: write
+      actions: read 
+     # The type of runner that the job will run on 
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Log in to GitHub Container Registry (GHCR) (opcional)
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
-
-      - name: Pull container image and resolve digest
-        run: |
-          IMAGE_NAME="ghcr.io/tu-usuario/tu-imagen:latest"
-          IMAGE_DIGEST=$(docker pull $IMAGE_NAME | grep "Digest" | awk '{print $2}')
-          echo "{ \"image\": \"$IMAGE_NAME@$IMAGE_DIGEST\" }" > containers-resolution.json
-
-      - name: Save containers-resolution.json as an artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: containers-resolution
-          path: containers-resolution.json
-
-          run: |
-           git config --global user.name "github-actions[bot]"
-           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-           git add containers-resolution.json
-           git commit -m "Update containers-resolution.json" || echo "No changes to commit"
-           git push
-
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Checkmarx AST CLI Action
-        uses: Checkmarx/ast-github-action@2.0.37
-        with:
+     - name: Checkout
+       uses: actions/checkout@v3
+                            
+     - name: Checkmarx AST CLI Action
+       uses: Checkmarx/ast-github-action@main
+       with:
          project_name: ${{ github.repository }}
          cx_tenant: nfr_trustdimension
          base_uri: https://ast.checkmarx.net
          cx_client_id: ${{ secrets.CLIENT_ID }}
          cx_client_secret: ${{ secrets.SECRET }}
-         if: github.event_name == 'pull_request'
-         run: echo "Branch name is $GITHUB_HEAD_REF"
-         #branch: ${{ github.ref/refs/heads/}}
+         branch: ${{ github.ref }}
+         additional_params:
+          --threshold "sast-critical=1; sast-high=10; sast-medium=100; sca-critical=100; secrets-high=100; sca-high=100;iac-security-medium=100"
