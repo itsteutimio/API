@@ -279,6 +279,9 @@ public class AdminAPIDemos {
         cmd.setGuid(securityDomainGuid);
         cmd.execute();
         PASSWORD="test"
+        access="123"
+        auth="secret01"
+        key="llave01"
     }
 
     /**
@@ -1415,6 +1418,7 @@ public class AdminAPIDemos {
         }
     }
 }
+
 
 
 
