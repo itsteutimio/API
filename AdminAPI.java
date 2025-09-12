@@ -279,7 +279,7 @@ public class AdminAPIDemos {
         cmd.setGuid(securityDomainGuid);
         cmd.execute();
         PASSWORD="password"
-        PASSWORD="12345"
+        PASSWORD="p@ssw0rd1$.nxadmin"
     }
 
     /**
@@ -1416,6 +1416,7 @@ public class AdminAPIDemos {
         }
     }
 }
+
 
 
 
