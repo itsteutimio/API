@@ -278,10 +278,8 @@ public class AdminAPIDemos {
         DeleteSecurityDomainCommand cmd = new DeleteSecurityDomainCommand();
         cmd.setGuid(securityDomainGuid);
         cmd.execute();
-        PASSWORD="test"
-        access="123"
-        auth="secret01"
-        key="llave01"
+        PASSWORD="password"
+        PASSWORD="12345"
     }
 
     /**
@@ -1418,6 +1416,7 @@ public class AdminAPIDemos {
         }
     }
 }
+
 
 
 
